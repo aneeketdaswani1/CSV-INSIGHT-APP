@@ -1,0 +1,32 @@
+Name,Age,Salary,Department,Join_Date,Is_Active,City
+John Smith,28,65000,Engineering,2022-01-15,True,San Francisco
+Jane Doe,34,72000,Marketing,2020-06-20,True,New York
+Bob Johnson,45,95000,Engineering,2018-03-10,True,San Francisco
+Alice Williams,31,68000,Sales,2021-09-05,True,Chicago
+Charlie Brown,29,58000,HR,2022-11-12,False,Boston
+Diana Prince,38,105000,Engineering,2019-05-22,True,San Francisco
+Edward Norton,41,78000,Marketing,2021-02-14,True,Los Angeles
+Fiona Apple,26,,Sales,2023-01-30,True,Chicago
+George Miller,52,110000,Engineering,2015-08-11,True,San Francisco
+Helen Hunt,35,72000,HR,2020-12-01,True,New York
+Ivan Smith,30,62000,Sales,2022-04-18,True,Boston
+Julia Roberts,33,85000,Marketing,2020-07-07,False,Los Angeles
+Kyle Johnson,27,55000,HR,2023-03-20,True,Chicago
+Laura Palmer,44,98000,Engineering,2017-09-14,True,San Francisco
+Michael Scott,39,88000,Management,2019-06-03,True,New York
+Nancy Drew,28,61000,Sales,2022-08-25,True,Chicago
+Oscar Wilde,37,92000,Engineering,2018-11-08,True,San Francisco
+Patricia Highsmith,36,79000,Marketing,2020-02-17,True,Boston
+Quinn Martin,45,115000,Engineering,2016-10-05,True,San Francisco
+Rachel Green,29,70000,Sales,2021-05-16,True,New York
+Samuel Jackson,50,125000,Management,2014-04-12,True,Los Angeles
+Tina Turner,32,75000,Marketing,2021-01-25,True,Chicago
+Uma Thurman,31,98000,Engineering,2019-12-11,True,San Francisco
+Victor Vance,43,87000,Sales,2018-06-20,True,New York
+Wanda Maximoff,26,52000,HR,2023-02-08,False,Chicago
+Xander Harris,38,82000,Engineering,2020-09-14,True,San Francisco
+Yasmine Bleeth,30,68000,Marketing,2021-11-03,True,Los Angeles
+Zoe Saldana,34,105000,Engineering,2019-03-27,True,San Francisco
+Adrian Grenier,35,76000,Sales,2020-04-22,True,Chicago
+Brianna Brown,28,,Marketing,2022-08-30,True,New York
+Cameron Diaz,41,125000,Management,2018-01-16,True,Los Angeles
