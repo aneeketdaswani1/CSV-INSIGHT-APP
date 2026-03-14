@@ -21,7 +21,7 @@
 
 - 🔍 **Automatic data type detection** and comprehensive statistics
 - 📈 **AI-generated visualizations** (histograms, bar charts, correlation matrices)
-- 🤖 **Claude AI analysis** with Python/pandas code suggestions
+- 🤖 **Gemini AI analysis** with Python/pandas code suggestions
 - 📄 **Professional PDF reports** combining data summaries and AI insights
 - ⚡ **Real-time analytics** with interactive dark-themed visualizations
 
@@ -50,9 +50,9 @@ No coding required. No data preprocessing needed. Just upload and analyze.
 - **Correlation Heatmap** - Relationships between numeric columns
 - **Interactive Plotly Charts** - Dark theme, hover tooltips, full responsiveness
 
-### 🤖 AI-Powered Analysis (Claude)
+### 🤖 AI-Powered Analysis (Gemini)
 - **Natural Language Interface** - Ask questions about your data
-- **Full Context Awareness** - Claude receives complete dataset summary
+- **Full Context Awareness** - Gemini receives complete dataset summary
 - **Code Suggestions** - Python/pandas snippets for data manipulation
 - **Conversation History** - Follow-up questions with full context
 - **Intelligent Insights** - Patterns, anomalies, and recommendations
@@ -60,7 +60,7 @@ No coding required. No data preprocessing needed. Just upload and analyze.
 ### 📄 Professional PDF Reports
 - **Dataset Summary** - Rows, columns, completeness metrics
 - **Column Information** - Types, null percentages, unique values
-- **AI-Generated Insights** - Latest Claude analysis
+- **AI-Generated Insights** - Latest Gemini analysis
 - **Embedded Charts** - All visualizations included
 - **Professional Formatting** - Ready for stakeholder presentation
 
@@ -77,7 +77,7 @@ No coding required. No data preprocessing needed. Just upload and analyze.
 - **NumPy** (v1.24+) - Numerical computing
 
 ### AI & Analysis
-- **Anthropic Claude 3.5 Sonnet** - Advanced reasoning and code generation
+- **Google Gemini 2.0 Flash** - Advanced reasoning and code generation
 - **Python-dotenv** - Environment variable management
 
 ### PDF & Export
@@ -116,11 +116,11 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-**4. Configure Anthropic API**
+**4. Configure Google Gemini API**
 ```bash
-# Get your free API key from https://console.anthropic.com
+# Get your free API key from https://aistudio.google.com/app/apikey
 # Create .env file
-echo "ANTHROPIC_API_KEY=sk-ant-..." > .env
+echo "GEMINI_API_KEY=your_gemini_api_key_here" > .env
 ```
 
 **5. Run Application**
@@ -167,9 +167,9 @@ Auto-charts appear automatically showing:
 ✓ Correlation matrix (numeric columns)
 ```
 
-### Step 5: Ask Claude
+### Step 5: Ask Gemini
 ```
-Scroll to "Ask Claude About Your Data"
+Scroll to "Ask Gemini About Your Data"
 ✓ Ask: "What are the top correlations?"
 ✓ Ask: "Show me code to group by Department"
 ✓ Get: Analysis + executable code
@@ -192,7 +192,7 @@ Scroll to "Ask Claude About Your Data"
 Upload: sales_data.csv
 Columns: Region, Product, Date, Sales, Units
 
-Claude Analysis:
+Gemini Analysis:
 - "Which region has highest sales variance?"
 - "Show me total sales by product and region"
 - "Identify top 3 performing products"
@@ -210,7 +210,7 @@ Output: Professional report with:
 Upload: hr_data.csv
 Columns: Department, Salary, Hire_Date, Performance_Score
 
-Claude Analysis:
+Gemini Analysis:
 - "What's the salary distribution by department?"
 - "Which employees are high performers?"
 - "Show correlation between hire date and salary"
@@ -228,7 +228,7 @@ Output: PDF report with:
 Upload: marketing_data.csv
 Columns: Campaign, Channel, Budget, Impressions, Conversions, Revenue
 
-Claude Analysis:
+Gemini Analysis:
 - "Which channel has best conversion rate?"
 - "Calculate ROI by campaign type"
 - "What's the correlation between spend and revenue?"
@@ -259,12 +259,12 @@ Output: Executive report with:
 - Auto-generated 3-chart visualization grid
 ```
 
-### Claude Chat Interface
+### Gemini Chat Interface
 ```
 [Screenshot: Chat section]
 - Conversation history
 - Chat input box
-- Claude responses with code suggestions
+- Gemini responses with code suggestions
 ```
 
 ### PDF Report
@@ -282,8 +282,8 @@ Output: Executive report with:
 
 ### Environment Variables (.env)
 ```bash
-# Required: Anthropic API Key
-ANTHROPIC_API_KEY=sk-ant-your-key-here
+# Required: Google Gemini API Key
+GEMINI_API_KEY=your-gemini-api-key-here
 
 # Optional: for future extensions
 DEBUG=false
@@ -306,7 +306,7 @@ git push origin main
 1. Go to share.streamlit.io
 2. Connect GitHub repo
 3. Select main branch
-4. Add ANTHROPIC_API_KEY secret
+4. Add GEMINI_API_KEY secret
 5. Deploy!
 ```
 
@@ -315,7 +315,7 @@ git push origin main
 # Using included Procfile
 heroku create YOUR_APP_NAME
 git push heroku main
-heroku config:set ANTHROPIC_API_KEY=sk-ant-...
+heroku config:set GEMINI_API_KEY=your-gemini-api-key-here
 ```
 
 ### Docker Deployment
@@ -381,11 +381,11 @@ A: Currently CSV files. Additional formats (Excel, JSON) planned for future rele
 A: Your data is:
 - Never stored on our servers
 - Never shared with third parties
-- Only sent to Claude for analysis (subject to Anthropic's privacy policy)
+- Only sent to Gemini for analysis (subject to Google's privacy policy)
 - Deleted after analysis
 
-**Q: Do I need my own Anthropic API key?**  
-A: Yes. You can get a free API key at [console.anthropic.com](https://console.anthropic.com)
+**Q: Do I need my own Google Gemini API key?**  
+A: Yes. You can get a free API key at [aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey)
 
 **Q: How large can CSV files be?**  
 A: Recommended up to 100MB. Very large files may experience slower analysis.
@@ -418,7 +418,7 @@ A: Yes! Instructions for Streamlit Cloud, Heroku, and Docker are included.
 
 <div align="center">
 
-**Built with ❤️ using Streamlit & Claude**
+**Built with ❤️ using Streamlit & Gemini**
 
 [⬆ Back to top](#datasense-ai---instant-business-intelligence)
 
@@ -455,10 +455,10 @@ cp .env.example .env
 
 5. Edit `.env` and add your API key:
 ```
-ANTHROPIC_API_KEY=your_actual_key_here
+GEMINI_API_KEY=your_actual_key_here
 ```
 
-The ANTHROPIC_API_KEY is required for the Claude chat feature. Get your free API key at [Anthropic Console](https://console.anthropic.com).
+The GEMINI_API_KEY is required for the Gemini chat feature. Get your free API key at [Google AI Studio](https://aistudio.google.com/app/apikey).
 
 ## Usage
 
@@ -481,9 +481,9 @@ The app will open in your default browser at `http://localhost:8501`
    - Histogram of highest-variance numeric data
    - Bar chart of categorical values
    - Correlation matrix (if applicable)
-5. **Ask Claude**: 
+5. **Ask Gemini**: 
    - Enter questions in the "Ask a question about your data..." input
-   - Claude analyzes the data with full context
+   - Gemini analyzes the data with full context
    - Get insights and pandas code suggestions
    - Review conversation history and ask follow-up questions
 6. **Data Quality**: Review null values, duplicates, and completeness metrics
@@ -508,7 +508,7 @@ csv-insights-app/
 - **numpy**: Numerical computations
 - **plotly**: Interactive visualizations
 - **python-dotenv**: Environment variable management
-- **anthropic**: (Optional) For future AI features
+- **google-generativeai**: Gemini API integration
 
 ## Features Breakdown
 
@@ -528,12 +528,12 @@ The dashboard automatically creates up to 3 visualizations:
 
 All charts are rendered in a clean 3-column grid with dark theme styling.
 
-### Claude AI Integration
+### Gemini AI Integration
 
-**Ask Claude anything about your data:**
+**Ask Gemini anything about your data:**
 - 🗣️ Interactive chat interface
 - 📊 Dataset context automatically included (column names, types, statistics)
-- 💡 Claude provides analysis, insights, and suggestions
+- 💡 Gemini provides analysis, insights, and suggestions
 - 📝 Receives pandas/Python code snippets for replicating analyses
 - 🔄 Conversation history maintained for context across questions
 - ⚙️ System prompt optimized for data analyst persona
@@ -620,7 +620,7 @@ Potential features to add:
 - 💾 Database integration for large datasets
 - 🎯 Anomaly detection features
 - 📈 Advanced statistical tests
-- 🌐 Multi-language support for Claude responses
+- 🌐 Multi-language support for Gemini responses
 
 ## License
 
