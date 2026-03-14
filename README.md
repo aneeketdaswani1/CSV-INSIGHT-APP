@@ -1,47 +1,428 @@
-# CSV Insights Dashboard
+# DataSense AI - Instant Business Intelligence
 
-A powerful Streamlit application for analyzing and visualizing CSV files with automatic data type detection, comprehensive statistics, interactive visualizations, and AI-powered analysis via Claude.
+<div align="center">
 
-## Features
+![DataSense AI](https://img.shields.io/badge/DataSense-AI-blueviolet?style=for-the-badge&logo=python)
+![Streamlit](https://img.shields.io/badge/Streamlit-1.28+-red?style=for-the-badge)
+![Python](https://img.shields.io/badge/Python-3.9+-blue?style=for-the-badge)
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
-✨ **Core Features:**
-- 📤 CSV file uploader with validation
-- 🔍 Automatic column type detection (numeric, categorical, datetime, boolean)
-- 📊 Display dataset shape (rows × columns)
-- 📋 Preview first 5 rows in a styled table
-- 🏷️ Summary cards for each column showing:
-  - Data type and detected type
-  - Null count and percentage
-  - Unique values count
-  - Min/max/mean for numeric columns
-  - Date range for datetime columns
+**Drop any CSV. Get Instant Business Intelligence.**
 
-📈 **Auto-Generated Charts:**
-- 📊 Histogram of highest-variance numeric column
-- 📦 Bar chart of top 10 categorical values
-- 🔗 Correlation heatmap for 3+ numeric columns
-- Displayed in a clean 3-column grid layout
+[Live Demo](#demo) • [Features](#features) • [Installation](#installation) • [Use Cases](#use-cases)
 
-🤖 **AI-Powered Data Analysis (Claude):**
-- 💬 Chat interface to ask questions about your data
-- 📝 Dataset context automatically provided to Claude
-- 💡 Receives analysis, insights, and pandas code suggestions
-- 🔄 Maintains conversation history for follow-up questions
-- 🎯 System prompt optimized for data analysis
+</div>
 
-📊 **Analytics & Visualization:**
-- 🌐 Interactive Plotly charts with dark theme
-- 📉 Distribution histograms for numeric data
-- 📦 Box plots for numeric columns
-- 🏘️ Bar charts for categorical data
-- 🔧 Data quality metrics (completeness, duplicates, empty columns)
-- 📋 Statistical summary tables
+---
 
-🎨 **User Experience:**
-- 🌙 Clean dark theme optimized for data analysis
-- 📱 Responsive layout with sidebar overview
-- 🎯 Easy navigation with tabs for different views
-- 💾 Export options (CSV, summary statistics)
+## 📊 Overview
+
+**DataSense AI** is an intelligent data analysis platform that transforms raw CSV files into actionable business insights. Upload a dataset and instantly get:
+
+- 🔍 **Automatic data type detection** and comprehensive statistics
+- 📈 **AI-generated visualizations** (histograms, bar charts, correlation matrices)
+- 🤖 **Claude AI analysis** with Python/pandas code suggestions
+- 📄 **Professional PDF reports** combining data summaries and AI insights
+- ⚡ **Real-time analytics** with interactive dark-themed visualizations
+
+No coding required. No data preprocessing needed. Just upload and analyze.
+
+---
+
+## ✨ Key Features
+
+### 📤 Smart Data Upload
+- **CSV File Support** with instant parsing and validation
+- **3 Sample Datasets** ready to explore (Sales, HR, Marketing)
+- **Auto-detect Column Types** - numeric, categorical, datetime, boolean
+
+### 📊 Comprehensive Analytics
+- **Dataset Overview** - shape, memory usage, data completeness
+- **Column Analysis Tabs**:
+  - Summary cards with statistics
+  - Statistical breakdowns (min/max/mean)
+  - Interactive distribution visualizations
+- **Data Quality Metrics** - null values, duplicates, empty columns
+
+### 🎨 Auto-Generated Visualizations
+- **Histogram** - Distribution of highest-variance numeric column
+- **Bar Chart** - Top 10 values from categorical columns
+- **Correlation Heatmap** - Relationships between numeric columns
+- **Interactive Plotly Charts** - Dark theme, hover tooltips, full responsiveness
+
+### 🤖 AI-Powered Analysis (Claude)
+- **Natural Language Interface** - Ask questions about your data
+- **Full Context Awareness** - Claude receives complete dataset summary
+- **Code Suggestions** - Python/pandas snippets for data manipulation
+- **Conversation History** - Follow-up questions with full context
+- **Intelligent Insights** - Patterns, anomalies, and recommendations
+
+### 📄 Professional PDF Reports
+- **Dataset Summary** - Rows, columns, completeness metrics
+- **Column Information** - Types, null percentages, unique values
+- **AI-Generated Insights** - Latest Claude analysis
+- **Embedded Charts** - All visualizations included
+- **Professional Formatting** - Ready for stakeholder presentation
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend & Framework
+- **Streamlit** (v1.28+) - Interactive web UI
+- **Plotly** (v5.17+) - Interactive visualizations
+
+### Data Processing
+- **Pandas** (v2.0+) - Data manipulation and analysis
+- **NumPy** (v1.24+) - Numerical computing
+
+### AI & Analysis
+- **Anthropic Claude 3.5 Sonnet** - Advanced reasoning and code generation
+- **Python-dotenv** - Environment variable management
+
+### PDF & Export
+- **FPDF2** - Professional PDF report generation
+- **Kaleido** - Chart image export
+
+### Hosting Ready
+- **Streamlit Cloud** - One-click deployment
+- **Heroku** - Docker-based deployment (Procfile included)
+
+---
+
+## 🚀 Quick Start
+
+### Local Installation
+
+**Prerequisites:**
+- Python 3.9+
+- pip or conda
+- Git (optional)
+
+**1. Clone Repository**
+```bash
+git clone https://github.com/yourusername/DataSense-AI.git
+cd DataSense-AI
+```
+
+**2. Create Virtual Environment**
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
+
+**3. Install Dependencies**
+```bash
+pip install -r requirements.txt
+```
+
+**4. Configure Anthropic API**
+```bash
+# Get your free API key from https://console.anthropic.com
+# Create .env file
+echo "ANTHROPIC_API_KEY=sk-ant-..." > .env
+```
+
+**5. Run Application**
+```bash
+streamlit run app.py
+```
+
+The app will open at `http://localhost:8501`
+
+### Try Sample Datasets
+After launching, click any sample dataset button:
+- 📈 **Sales Data** - Product sales across regions
+- 👥 **HR Data** - Employee information and performance
+- 📢 **Marketing Data** - Campaign metrics and ROI
+
+---
+
+## 📚 How to Use
+
+### Step 1: Upload Your Data
+```
+✓ Click the file uploader above
+✓ Select a CSV file from your computer
+✓ OR click a sample dataset button for instant demo
+```
+
+### Step 2: Explore Automatically
+```
+✓ View dataset overview (rows, columns, memory)
+✓ See first 5 rows with syntax highlighting
+✓ Auto-detected column types and statistics
+```
+
+### Step 3: Analyze with Tabs
+- **Summary Cards** - Detailed stats for each column
+- **Statistics** - Numeric column summaries
+- **Distribution** - Interactive charts per column
+
+### Step 4: Get Visualizations
+```
+Auto-charts appear automatically showing:
+✓ Histogram of high-variance numeric data
+✓ Bar chart of categorical values
+✓ Correlation matrix (numeric columns)
+```
+
+### Step 5: Ask Claude
+```
+Scroll to "Ask Claude About Your Data"
+✓ Ask: "What are the top correlations?"
+✓ Ask: "Show me code to group by Department"
+✓ Get: Analysis + executable code
+✓ View: Full conversation history
+```
+
+### Step 6: Export Results
+- 📥 Download CSV
+- 📊 Download Summary Statistics  
+- 📄 **Generate PDF Report** (with AI insights + charts)
+
+---
+
+## 💡 Use Cases
+
+### 1. **Sales Analytics** 📈
+**Scenario:** Analyzing quarterly sales performance
+
+```
+Upload: sales_data.csv
+Columns: Region, Product, Date, Sales, Units
+
+Claude Analysis:
+- "Which region has highest sales variance?"
+- "Show me total sales by product and region"
+- "Identify top 3 performing products"
+
+Output: Professional report with:
+✓ Regional performance trends
+✓ Product comparison charts
+✓ Correlation between units sold and revenue
+```
+
+### 2. **HR Analytics** 👥
+**Scenario:** Understanding workforce metrics
+
+```
+Upload: hr_data.csv
+Columns: Department, Salary, Hire_Date, Performance_Score
+
+Claude Analysis:
+- "What's the salary distribution by department?"
+- "Which employees are high performers?"
+- "Show correlation between hire date and salary"
+
+Output: PDF report with:
+✓ Departmental salary insights
+✓ Performance distribution analysis
+✓ Compensation trends by tenure
+```
+
+### 3. **Marketing ROI Analysis** 📢
+**Scenario:** Evaluating campaign performance
+
+```
+Upload: marketing_data.csv
+Columns: Campaign, Channel, Budget, Impressions, Conversions, Revenue
+
+Claude Analysis:
+- "Which channel has best conversion rate?"
+- "Calculate ROI by campaign type"
+- "What's the correlation between spend and revenue?"
+
+Output: Executive report with:
+✓ Channel performance comparison
+✓ ROI rankings and trends
+✓ Budget efficiency insights
+```
+
+---
+
+## 📊 Screenshot Placeholders
+
+### Dashboard Overview
+```
+[Screenshot: Hero header with gradient background]
+- App name: DataSense AI
+- Tagline: Drop any CSV. Get instant business intelligence.
+- Sample dataset buttons
+```
+
+### Data Analysis Interface
+```
+[Screenshot: Main dashboard]
+- Dataset metrics (rows, columns, memory)
+- First 5 rows preview
+- Auto-generated 3-chart visualization grid
+```
+
+### Claude Chat Interface
+```
+[Screenshot: Chat section]
+- Conversation history
+- Chat input box
+- Claude responses with code suggestions
+```
+
+### PDF Report
+```
+[Screenshot: Sample PDF output]
+- Professional header with timestamp
+- Dataset summary
+- AI-generated insights
+- Embedded visualizations
+```
+
+---
+
+## 🔧 Configuration
+
+### Environment Variables (.env)
+```bash
+# Required: Anthropic API Key
+ANTHROPIC_API_KEY=sk-ant-your-key-here
+
+# Optional: for future extensions
+DEBUG=false
+```
+
+### Requirements
+- See `requirements.txt` for all dependencies
+- Python 3.9+ recommended for compatibility
+
+---
+
+## 🚀 Deployment
+
+### Streamlit Cloud (Recommended)
+```bash
+# Push to GitHub
+git push origin main
+
+# Deploy via Streamlit Cloud dashboard
+1. Go to share.streamlit.io
+2. Connect GitHub repo
+3. Select main branch
+4. Add ANTHROPIC_API_KEY secret
+5. Deploy!
+```
+
+### Heroku Deployment
+```bash
+# Using included Procfile
+heroku create YOUR_APP_NAME
+git push heroku main
+heroku config:set ANTHROPIC_API_KEY=sk-ant-...
+```
+
+### Docker Deployment
+```dockerfile
+FROM python:3.9-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+COPY . .
+CMD ["streamlit", "run", "app.py"]
+```
+
+---
+
+## 📋 Project Structure
+
+```
+DataSense-AI/
+├── app.py                 # Main Streamlit application
+├── requirements.txt       # Python dependencies
+├── Procfile              # Heroku deployment
+├── .env                  # Environment variables (gitignored)
+├── .env.example          # Template for environment variables
+├── .gitignore            # Git ignore rules
+├── datasets/
+│   ├── sales_data.csv    # Sample: Product sales data
+│   ├── hr_data.csv       # Sample: Employee information
+│   └── marketing_data.csv # Sample: Campaign metrics
+├── README.md             # This file
+├── QUICKSTART.md         # Quick reference guide
+└── NEW_FEATURES.md       # Latest feature documentation
+```
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! To contribute:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+---
+
+## 📝 License
+
+This project is licensed under the MIT License - see LICENSE file for details.
+
+---
+
+## 🙋 Support & FAQ
+
+**Q: Do I need coding skills to use DataSense AI?**  
+A: No! The app is designed for non-technical users. Just upload a CSV and start analyzing.
+
+**Q: What file formats are supported?**  
+A: Currently CSV files. Additional formats (Excel, JSON) planned for future releases.
+
+**Q: Is my data kept private?**  
+A: Your data is:
+- Never stored on our servers
+- Never shared with third parties
+- Only sent to Claude for analysis (subject to Anthropic's privacy policy)
+- Deleted after analysis
+
+**Q: Do I need my own Anthropic API key?**  
+A: Yes. You can get a free API key at [console.anthropic.com](https://console.anthropic.com)
+
+**Q: How large can CSV files be?**  
+A: Recommended up to 100MB. Very large files may experience slower analysis.
+
+**Q: Can I deploy this myself?**  
+A: Yes! Instructions for Streamlit Cloud, Heroku, and Docker are included.
+
+---
+
+## 🔮 Roadmap
+
+- [ ] Excel and JSON file support
+- [ ] Real-time data collaboration
+- [ ] Advanced statistical testing
+- [ ] Time series forecasting
+- [ ] Data cleaning automation
+- [ ] Custom chart creation
+- [ ] Multi-language support
+- [ ] Mobile app version
+
+---
+
+## 📞 Contact
+
+- **GitHub Issues** - Report bugs and request features
+- **Email** - [your-email@example.com]
+- **Twitter** - [@yourusername]
+
+---
+
+<div align="center">
+
+**Built with ❤️ using Streamlit & Claude**
+
+[⬆ Back to top](#datasense-ai---instant-business-intelligence)
+
+</div>
 
 ## Installation
 

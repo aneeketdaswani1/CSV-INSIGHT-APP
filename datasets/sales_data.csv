@@ -1,0 +1,31 @@
+Product,Region,Date,Sales,Units,Category
+TechPro Pro,North America,2024-01-15,45000,150,Electronics
+CloudSync,Europe,2024-01-16,32000,100,Software
+DataVault,Asia,2024-01-17,28500,85,Software
+TechPro Pro,North America,2024-01-18,52000,180,Electronics
+CloudSync,Europe,2024-01-19,35600,110,Software
+DataVault,Asia,2024-01-20,31200,95,Software
+TechPro Pro,North America,2024-01-21,48900,165,Electronics
+CloudSync,Asia,2024-01-22,38000,120,Software
+DataVault,North America,2024-01-23,42000,140,Software
+TechPro Pro,Europe,2024-01-24,39500,130,Electronics
+CloudSync,North America,2024-01-25,41000,135,Software
+DataVault,Europe,2024-01-26,35800,115,Software
+TechPro Pro,Asia,2024-01-27,48000,160,Electronics
+CloudSync,Europe,2024-01-28,37200,115,Software
+DataVault,Asia,2024-01-29,33500,105,Software
+TechPro Pro,North America,2024-01-30,55000,190,Electronics
+CloudSync,North America,2024-01-31,42500,140,Software
+DataVault,Europe,2024-02-01,36000,120,Software
+TechPro Pro,Europe,2024-02-02,43000,140,Electronics
+CloudSync,Asia,2024-02-03,39500,125,Software
+DataVault,North America,2024-02-04,44500,150,Software
+TechPro Pro,Asia,2024-02-05,51000,170,Electronics
+CloudSync,Europe,2024-02-06,38200,120,Software
+DataVault,Asia,2024-02-07,32800,100,Software
+TechPro Pro,North America,2024-02-08,49500,170,Electronics
+CloudSync,North America,2024-02-09,40800,135,Software
+DataVault,Europe,2024-02-10,37500,125,Software
+TechPro Pro,Europe,2024-02-11,41200,135,Electronics
+CloudSync,Asia,2024-02-12,35900,115,Software
+DataVault,North America,2024-02-13,43200,145,Software

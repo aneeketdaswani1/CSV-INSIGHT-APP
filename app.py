@@ -6,11 +6,16 @@ import plotly.graph_objects as go
 from datetime import datetime
 import os
 from dotenv import load_dotenv
-from anthropic import Anthropic
+import google.generativeai as genai
+from fpdf import FPDF
+import io
+import base64
 
 # Load environment variables
 load_dotenv()
-API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
+if GEMINI_API_KEY:
+    genai.configure(api_key=GEMINI_API_KEY)
 
 # Page config
 st.set_page_config(
@@ -85,10 +90,59 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+# Hero Header
+col1, col2 = st.columns([3, 1])
+with col1:
+    st.markdown("""
+    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px; border-radius: 10px; color: white; margin-bottom: 20px;">
+        <h1 style="margin: 0; font-size: 48px;">🚀 DataSense AI</h1>
+        <p style="margin: 10px 0 0 0; font-size: 20px; opacity: 0.95;">Drop any CSV. Get instant business intelligence.</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+# Sample Datasets
+st.markdown("### 📚 Try Sample Datasets")
+sample_col1, sample_col2, sample_col3 = st.columns(3)
+
+with sample_col1:
+    if st.button("📈 Sales Data", use_container_width=True):
+        try:
+            sample_df = pd.read_csv("datasets/sales_data.csv")
+            st.session_state.df = sample_df
+            st.session_state.file_name = "sales_data.csv"
+            st.session_state.chat_history = []
+            st.rerun()
+        except FileNotFoundError:
+            st.error("Sample file not found")
+
+with sample_col2:
+    if st.button("👥 HR Data", use_container_width=True):
+        try:
+            sample_df = pd.read_csv("datasets/hr_data.csv")
+            st.session_state.df = sample_df
+            st.session_state.file_name = "hr_data.csv"
+            st.session_state.chat_history = []
+            st.rerun()
+        except FileNotFoundError:
+            st.error("Sample file not found")
+
+with sample_col3:
+    if st.button("📢 Marketing Data", use_container_width=True):
+        try:
+            sample_df = pd.read_csv("datasets/marketing_data.csv")
+            st.session_state.df = sample_df
+            st.session_state.file_name = "marketing_data.csv"
+            st.session_state.chat_history = []
+            st.rerun()
+        except FileNotFoundError:
+            st.error("Sample file not found")
+
+st.divider()
+
 # Title
 st.title("📊 CSV Insights Dashboard")
 st.markdown(
-    "Upload a CSV file to analyze its structure, data types, auto-generate visualizations, and ask Claude about your data",
+    "Upload a CSV file to analyze its structure, data types, auto-generate visualizations, and ask Gemini about your data",
     help="Supported file: CSV (.csv)"
 )
 
@@ -99,8 +153,6 @@ if "file_name" not in st.session_state:
     st.session_state.file_name = None
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
-if "claude_client" not in st.session_state and API_KEY:
-    st.session_state.claude_client = Anthropic(api_key=API_KEY)
 
 
 def detect_column_type(series):
@@ -231,7 +283,8 @@ def generate_auto_charts(df):
             x=numeric_cols,
             y=numeric_cols,
             color_continuous_scale="RdBu",
-            zmid=0,
+            zmin=-1,
+            zmax=1,
             title="Correlation Heatmap",
             template="plotly_dark"
         )
@@ -246,7 +299,7 @@ def generate_auto_charts(df):
 
 
 def get_dataset_summary(df):
-    """Generate a text summary of the dataset for Claude"""
+    """Generate a text summary of the dataset for Gemini"""
     summary = f"""Dataset Overview:
 - Shape: {len(df)} rows × {len(df.columns)} columns
 - Columns: {', '.join(df.columns.tolist())}
@@ -266,14 +319,12 @@ Column Details:
     return summary
 
 
-def chat_with_claude(user_message, df):
-    """Send a message to Claude with dataset context"""
-    if not API_KEY or not hasattr(st.session_state, 'claude_client'):
+def chat_with_gemini(user_message, df):
+    """Send a message to Gemini with dataset context"""
+    if not GEMINI_API_KEY:
         return None
     
     try:
-        client = st.session_state.claude_client
-        
         # Add user message to history
         st.session_state.chat_history.append({
             "role": "user",
@@ -283,33 +334,43 @@ def chat_with_claude(user_message, df):
         # Get dataset summary for context
         dataset_summary = get_dataset_summary(df)
         
-        # Build messages with system context
-        messages = []
-        
-        # Add system context as first user message if it's the first message
+        # Build the prompt with context
         if len(st.session_state.chat_history) == 1:
-            messages.append({
-                "role": "user",
-                "content": f"Here is the dataset I've uploaded:\n\n{dataset_summary}\n\nPlease keep this context in mind for all my questions."
-            })
-            messages.append({
-                "role": "assistant",
-                "content": "Got it! I have the dataset context. Feel free to ask me any questions about your data. I can help you analyze it, suggest pandas code, or provide insights."
-            })
+            # First message - provide full context
+            full_prompt = f"""You are a data analyst assistant. The user has uploaded a dataset. Answer questions about it concisely and helpfully. When relevant, suggest short Python/pandas code snippets they can run to analyze their data. Format code in markdown with ```python blocks.
+
+Here is the dataset I've uploaded:
+
+{dataset_summary}
+
+Please keep this context in mind for all my questions.
+
+User's question: {user_message}"""
+        else:
+            # Follow-up message - include conversation history
+            conversation = ""
+            for msg in st.session_state.chat_history[:-1]:  # Exclude the current message we just added
+                role = "User" if msg["role"] == "user" else "Assistant"
+                conversation += f"{role}: {msg['content']}\n\n"
+            
+            full_prompt = f"""{conversation}
+
+User's new question: {user_message}
+
+Please continue the conversation by answering the user's question concisely."""
         
-        # Add chat history
-        for msg in st.session_state.chat_history:
-            messages.append(msg)
-        
-        # Call Claude API
-        response = client.messages.create(
-            model="claude-3-5-sonnet-20241022",
-            max_tokens=2000,
-            system="You are a data analyst assistant. The user has uploaded a dataset. Answer questions about it concisely and helpfully. When relevant, suggest short Python/pandas code snippets they can run to analyze their data. Format code in markdown with ```python blocks.",
-            messages=messages
-        )
-        
-        assistant_message = response.content[0].text
+        # Call Gemini API with proper error handling
+        try:
+            model = genai.GenerativeModel('gemini-2.0-flash')
+            response = model.generate_content(full_prompt, stream=False)
+            
+            # Check if response has content
+            if response is None or not hasattr(response, 'text'):
+                assistant_message = "I couldn't generate a response. Please try again."
+            else:
+                assistant_message = response.text.strip() if response.text else "I couldn't generate a response. Please try again."
+        except Exception as api_error:
+            raise Exception(f"Gemini API error: {str(api_error)}")
         
         # Add assistant response to history
         st.session_state.chat_history.append({
@@ -320,14 +381,104 @@ def chat_with_claude(user_message, df):
         return assistant_message
     
     except Exception as e:
-        st.error(f"Error communicating with Claude: {str(e)}")
+        st.error(f"Error communicating with Gemini: {str(e)}")
         # Remove the user message from history if API call failed
         if st.session_state.chat_history and st.session_state.chat_history[-1]["role"] == "user":
             st.session_state.chat_history.pop()
         return None
 
 
-# Sidebar
+def create_pdf_report(df, charts, chat_insights=""):
+    """Create a comprehensive PDF report with dataset summary, insights, and charts"""
+    try:
+        pdf = FPDF(orientation="P", unit="mm", format="A4")
+        pdf.add_page()
+        pdf.set_font("Helvetica", "B", 20)
+        
+        # Title
+        pdf.cell(0, 10, "DataSense AI - Report", ln=True, align="C")
+        pdf.set_font("Helvetica", "I", 10)
+        pdf.cell(0, 5, f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M')}", ln=True, align="C")
+        
+        # Dataset Summary
+        pdf.ln(5)
+        pdf.set_font("Helvetica", "B", 14)
+        pdf.cell(0, 8, "Dataset Summary", ln=True)
+        pdf.set_font("Helvetica", "", 10)
+        
+        summary_text = f"""
+• Rows: {len(df):,}
+• Columns: {len(df.columns)}
+• Memory: {df.memory_usage(deep=True).sum() / 1024**2:.2f} MB
+• Data Completeness: {((len(df) * len(df.columns) - df.isna().sum().sum()) / (len(df) * len(df.columns)) * 100):.1f}%
+        """
+        pdf.multi_cell(0, 5, summary_text.strip())
+        
+        # Column Information
+        pdf.ln(3)
+        pdf.set_font("Helvetica", "B", 12)
+        pdf.cell(0, 6, "Column Information", ln=True)
+        pdf.set_font("Helvetica", "", 9)
+        
+        col_info = ""
+        for col in df.columns[:10]:  # Limit to first 10 columns
+            stats = get_column_stats(df, col)
+            col_type = stats['detected_type']
+            col_info += f"• {col}: {col_type} ({stats['unique_values']} unique, {stats['null_percent']:.1f}% null)\n"
+        
+        if len(df.columns) > 10:
+            col_info += f"• ... and {len(df.columns) - 10} more columns"
+        
+        pdf.multi_cell(0, 4, col_info.strip())
+        
+        # Gemini Insights
+        if chat_insights:
+            pdf.add_page()
+            pdf.set_font("Helvetica", "B", 14)
+            pdf.cell(0, 8, "AI-Powered Insights (Gemini)", ln=True)
+            pdf.set_font("Helvetica", "", 10)
+            pdf.multi_cell(0, 5, chat_insights[:1500])  # Limit insights to prevent long PDFs
+        
+        # Charts
+        if charts:
+            pdf.add_page()
+            pdf.set_font("Helvetica", "B", 14)
+            pdf.cell(0, 8, "Visualizations", ln=True)
+            
+            # Try to export charts as images and add to PDF
+            try:
+                for idx, (chart_type, fig) in enumerate(charts):
+                    if idx > 0 and idx % 2 == 0:
+                        pdf.add_page()
+                    
+                    # Use Plotly's to_image if available
+                    try:
+                        img_bytes = fig.to_image(format="png", width=500, height=400)
+                        img_buffer = io.BytesIO(img_bytes)
+                        x_pos = 10 if idx % 2 == 0 else 110
+                        y_pos = pdf.get_y() if idx % 2 == 0 else y_pos
+                        pdf.image(img_buffer, x=x_pos, y=y_pos, w=90)
+                        if idx % 2 == 0:
+                            pdf.ln(95)
+                    except:
+                        # Fallback: just add text if image export fails
+                        pdf.set_font("Helvetica", "", 10)
+                        pdf.cell(0, 5, f"[Chart: {chart_type}]", ln=True)
+            except:
+                pdf.set_font("Helvetica", "", 10)
+                pdf.cell(0, 5, "[Charts export requires kaleido library]", ln=True)
+        
+        # Footer
+        pdf.ln(10)
+        pdf.set_font("Helvetica", "I", 9)
+        pdf.cell(0, 5, "Powered by DataSense AI", align="C")
+        
+        return pdf.output(dest="S").encode("latin-1")
+    
+    except Exception as e:
+        st.error(f"Error generating PDF: {str(e)}")
+        return None
+
 with st.sidebar:
     st.markdown("### 📋 Dataset Overview")
     
@@ -380,12 +531,12 @@ with st.sidebar:
     st.divider()
     
     # API Key status
-    if API_KEY:
-        st.success("✅ Claude API configured")
+    if GEMINI_API_KEY:
+        st.success("✅ Gemini API configured")
     else:
-        st.warning("⚠️ Claude integration disabled (no API key)")
+        st.warning("⚠️ Gemini integration disabled (no API key)")
     
-    st.markdown("**Made with ❤️ using Streamlit & Claude**")
+    st.markdown("**Made with ❤️ using Streamlit & Gemini**")
 
 
 # Main content
@@ -599,15 +750,15 @@ if uploaded_file is not None:
         
         st.divider()
         
-        # CLAUDE CHAT SECTION
-        st.markdown("### 🤖 Ask Claude About Your Data")
-        st.markdown("Have questions about your dataset? Ask Claude for analysis, insights, and code suggestions.")
+        # GEMINI CHAT SECTION
+        st.markdown("### 🤖 Ask Gemini About Your Data")
+        st.markdown("Have questions about your dataset? Ask Gemini for analysis, insights, and code suggestions.")
         
         # Display API key warning if not configured
-        if not API_KEY:
+        if not GEMINI_API_KEY:
             st.warning(
-                "⚠️ Claude integration is disabled. To enable, set your `ANTHROPIC_API_KEY` in the `.env` file. "
-                "[Get API key](https://console.anthropic.com)"
+                "⚠️ Gemini integration is disabled. To enable, set your `GEMINI_API_KEY` in the `.env` file. "
+                "[Get API key](https://aistudio.google.com/app/apikey)"
             )
         else:
             # Display chat history
@@ -618,21 +769,26 @@ if uploaded_file is not None:
                     if message["role"] == "user":
                         st.markdown(f"**You:** {message['content']}")
                     else:
-                        st.markdown(f"**Claude:** {message['content']}")
+                        st.markdown(f"**Gemini:** {message['content']}")
             
             # Input for new question
             user_input = st.chat_input(
                 "Ask a question about your data...",
-                key="claude_input"
+                key="gemini_input"
             )
             
             if user_input:
-                # Show spinner while waiting for response
-                with st.spinner("Claude is thinking..."):
-                    response = chat_with_claude(user_input, df)
-                
-                # Rerun to display the new message
-                st.rerun()
+                # Ensure df is loaded
+                if st.session_state.df is not None:
+                    # Show spinner while waiting for response
+                    with st.spinner("Gemini is thinking..."):
+                        # Use session state df to ensure it persists across reruns
+                        response = chat_with_gemini(user_input, st.session_state.df)
+                    
+                    # Rerun to display the new message
+                    st.rerun()
+                else:
+                    st.error("Error: Dataset not loaded. Please upload a file first.")
         
         st.divider()
         
@@ -682,7 +838,7 @@ if uploaded_file is not None:
             st.download_button(
                 label="📥 Download CSV",
                 data=csv,
-                file_name=f"insights_{uploaded_file.name}",
+                file_name=f"insights_{st.session_state.file_name}",
                 mime="text/csv"
             )
         
@@ -693,12 +849,36 @@ if uploaded_file is not None:
             st.download_button(
                 label="📊 Download Summary Stats",
                 data=summary_csv,
-                file_name=f"summary_{uploaded_file.name}",
+                file_name=f"summary_{st.session_state.file_name}",
                 mime="text/csv"
             )
         
         with col3:
-            st.write("")  # Spacing
+            # PDF Report with AI insights
+            if st.button("📄 Generate PDF Report", use_container_width=True):
+                with st.spinner("Generating PDF report..."):
+                    # Get latest Gemini insights
+                    latest_insight = ""
+                    if st.session_state.chat_history:
+                        for msg in reversed(st.session_state.chat_history):
+                            if msg["role"] == "assistant":
+                                latest_insight = msg["content"]
+                                break
+                    
+                    # Get auto charts
+                    charts = generate_auto_charts(df)
+                    
+                    # Generate PDF
+                    pdf_data = create_pdf_report(df, charts, latest_insight)
+                    
+                    if pdf_data:
+                        st.download_button(
+                            label="💾 Download PDF",
+                            data=pdf_data,
+                            file_name=f"report_{st.session_state.file_name.replace('.csv', '.pdf')}",
+                            mime="application/pdf"
+                        )
+                        st.success("✅ PDF report ready for download!")
     
     except Exception as e:
         st.error(f"❌ Error reading file: {str(e)}")
@@ -715,7 +895,7 @@ else:
         2. 🔍 View automatic column type detection (numeric, categorical, datetime)
         3. 📊 Explore summary statistics and distributions
         4. � See auto-generated charts based on your data
-        5. 🤖 Ask Claude questions about your dataset
+        5. 🤖 Ask Gemini questions about your dataset
         6. 🔧 Check data quality metrics
         7. 💾 Download processed data
         
@@ -723,7 +903,7 @@ else:
         - ✅ Auto-detect column types
         - ✅ Comprehensive statistics for each column
         - ✅ Interactive auto-generated visualizations (histogram, bar chart, correlation matrix)
-        - ✅ AI-powered data analysis via Claude
+        - ✅ AI-powered data analysis via Gemini
         - ✅ Data quality analysis
         - ✅ Dark theme with clean UI
         """
